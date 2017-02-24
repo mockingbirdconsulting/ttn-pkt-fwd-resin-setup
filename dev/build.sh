@@ -1,71 +1,47 @@
 #! /bin/bash
 
-# Stop on the first sign of trouble
-set -e
+mkdir -p /opt/ttn-gateway/dev
+cd /opt/ttn-gateway/dev
+git clone git://git.drogon.net/wiringPi
+cd wiringPi
+cd ..
+git clone https://github.com/kersing/lora_gateway.git
+git clone https://github.com/kersing/paho.mqtt.embedded-c.git
+git clone https://github.com/kersing/ttn-gateway-connector.git
+git clone https://github.com/kersing/protobuf-c.git
+git clone https://github.com/kersing/packet_forwarder.git
+git clone https://github.com/google/protobuf.git
 
-echo "The Things Network Raspberry Pi Gateway Builder/Installer"
-echo ""
+apt update
+apt install protobuf-compiler
+apt install libprotobuf-dev
+apt install libprotoc-dev
+apt install automake
+apt install libtool
+apt install autoconf
 
-# Build in a temp folder that we'll completely  purge after build,
-# and install into the linux folder where apps reside.
-
-INSTALL_DIR="/opt/ttn-gateway"
-if [ ! -d "$INSTALL_DIR" ]; then mkdir $INSTALL_DIR; fi
-
-BUILD_DIR="$INSTALL_DIR/dev"
-if [ ! -d "$BUILD_DIR" ]; then mkdir $BUILD_DIR; fi
-
-# Switch to where we'll do the builds
-pushd $BUILD_DIR
-
-# Build WiringPi so that we can do Raspberry Pi I/O
-if [ ! -d wiringPi ]; then
-    git clone git://git.drogon.net/wiringPi
-    pushd wiringPi
-else
-    pushd wiringPi
-    git reset --hard
-    git pull
-fi
-./build
-popd
-
-# Build LoRa gateway app for this specific platform
-if [ ! -d lora_gateway ]; then
-    git clone https://github.com/TheThingsNetwork/lora_gateway.git
-    pushd lora_gateway
-else
-    pushd lora_gateway
-    git reset --hard
-    git pull
-fi
-sed -i -e 's/PLATFORM= kerlink/PLATFORM= imst_rpi/g' ./libloragw/library.cfg
-# Comment the following in or out as needed for hardware debugging
-#sed -i -e 's/DEBUG_SPI= 0/DEBUG_SPI= 1/g' ./libloragw/library.cfg
-#sed -i -e 's/DEBUG_REG= 0/DEBUG_REG= 1/g' ./libloragw/library.cfg
-#sed -i -e 's/DEBUG_HAL= 0/DEBUG_HAL= 1/g' ./libloragw/library.cfg
-#sed -i -e 's/DEBUG_AUX= 0/DEBUG_AUX= 1/g' ./libloragw/library.cfg
-#sed -i -e 's/DEBUG_GPS= 0/DEBUG_GPS= 1/g' ./libloragw/library.cfg
+cd lora_gateway/libloragw
+sed -i -e 's/PLATFORM= .*$/PLATFORM= imst_rpi/g' library.cfg
+sed -i -e 's/CFG_SPI= .*$/CFG_SPI= native/g' library.cfg
 make
-popd
 
-# Build the packet forwarder
-if [ ! -d packet_forwarder ]; then
-    git clone https://github.com/TheThingsNetwork/packet_forwarder.git
-    pushd packet_forwarder
-else
-    pushd packet_forwarder
-    git pull
-    git reset --hard
-fi
+cd ../../protobuf-c
+./autogen.sh
+./configure
+make protobuf-c/libprotobuf-c.la
+mkdir bin
+./libtool install /usr/bin/install -c protobuf-c/libprotobuf-c.la `pwd`/bin
+
+cd ../paho.mqtt.embedded-c/
 make
-popd
+make install
 
-# Restore location back to where we were prior to starting the build
-popd
+cd ../ttn-gateway-connector
+cp config.mk.in config.mk
+make
+cp bin/libttn-gateway-connector.so /usr/lib/
 
-# Copy things needed at runtime to where they'll be expected
-cp $BUILD_DIR/packet_forwarder/reset_pkt_fwd.sh $INSTALL_DIR/set-gateway-id.sh
-cp $BUILD_DIR/packet_forwarder/poly_pkt_fwd/poly_pkt_fwd $INSTALL_DIR/ttn-gateway
+cd ../packet_forwarder/mp_pkt_fwd/
+make
 
 echo "Build & Installation Completed."
