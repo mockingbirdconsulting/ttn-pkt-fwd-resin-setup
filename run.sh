@@ -2,7 +2,7 @@
 
 # Exit if we're debugging and haven't yet built the gateway
 
-if [ ! -f  "/opt/ttn-gateway/dev/packet_forwarder/mp_pkt_fwd/mp_pkt_fwd" ]; then
+if [ ! -f  "mp_pkt_fwd" ]; then
     echo "ERROR: gateway executable not yet built"
     exit 1
 fi
@@ -157,12 +157,18 @@ echo -e "{\n\
 \t}\n\
 }" >./local_conf.json
 
-# Set gateway_ID in local_conf.json to the gateway's MAC address
 
-#echo "******************"
-#./set-gateway-id.sh start ./local_conf.json
-#echo "******************"
-#echo ""
+echo "******************"
+# get gateway ID from its MAC address
+GWID_PREFIX="FFFE"
+GWID=$(ip link show eth0 | awk '/ether/ {print $2}' | awk -F\: '{print $1$2$3$4$5$6}')
+
+# replace last 8 digits of default gateway ID by actual GWID, in given JSON configuration file
+sed -i 's/\(^\s*"gateway_ID":\s*"\).\{16\}"\s*\(,\?\).*$/\1'${GWID_PREFIX}${GWID}'"\2/' local_conf.json
+
+echo "Gateway_ID set to "$GWID_PREFIX$GWID" "
+echo "******************"
+echo ""
 
 
 # Fire up the forwarder.
