@@ -84,6 +84,7 @@ cd $INSTALL_DIR/dev/protobuf-c
 make protobuf-c/libprotobuf-c.la
 mkdir bin
 ./libtool install /usr/bin/install -c protobuf-c/libprotobuf-c.la `pwd`/bin
+rm -f `pwd`/bin/*so*
 
 cd $INSTALL_DIR/dev/paho.mqtt.embedded-c/
 make
