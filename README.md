@@ -108,3 +108,4 @@ RESIN_HOST_CONFIG_core_freq   | 250
 [Gonzalo Casas](https://github.com/gonzalocasas) on the [iC880a-based gateway](https://github.com/ttn-zh/ic880a-gateway/tree/spi)  
 [Ruud Vlaming](https://github.com/devlaam) on the [Lorank8 installer](https://github.com/Ideetron/Lorank)  
 [The Team](https://resin.io/team/) at resin.io   
+[Jac Kersing](https://github.com/kersing) for writing the new Multi-protocol packet forwarder.
