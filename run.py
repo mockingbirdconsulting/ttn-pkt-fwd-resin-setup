@@ -61,6 +61,7 @@ if os.environ.get("GW_KEY")==None:
   sys.exit(0)
 
 my_eui = GWID_PREFIX + format(uuid.getnode(), '012x')
+my_eui = my_eui.upper()
 
 print ("Gateway Type:\t"+os.environ.get("GW_TYPE"))
 print ("Gateway ID:\t"+os.environ.get("GW_ID"))
@@ -148,12 +149,14 @@ gateway_conf['contact_email'] = os.getenv('GW_CONTACT_EMAIL', "")
 gateway_conf['description'] = description
 
 # Use hardware GPS
-if(os.getenv('GW_GPS', True)):
+if(os.getenv('GW_GPS', False)==True):
+  print ("Using real GPS")
   gateway_conf['gps'] = True
   gateway_conf['fake_gps'] = False
   gateway_conf['gps_tty_path'] = os.getenv('GW_GPS_PORT', "/dev/ttyAMA0")
 # Use fake GPS with coordinates from TTN
-if(os.getenv('GW_GPS', False) and latitude!=0 and longitude!=0):
+elif(os.getenv('GW_GPS', False)==False and latitude!=0 and longitude!=0):
+  print ("Using fake GPS")
   gateway_conf['gps'] = True
   gateway_conf['fake_gps'] = True
   gateway_conf['ref_latitude'] = latitude
@@ -161,6 +164,7 @@ if(os.getenv('GW_GPS', False) and latitude!=0 and longitude!=0):
   gateway_conf['ref_altitude'] = altitude
 # No GPS coordinates
 else:
+  print ("Not sending coordinates")
   gateway_conf['gps'] = False
   gateway_conf['fake_gps'] = False
 
@@ -179,40 +183,40 @@ if(os.getenv('SERVER_TTN', True)):
   gateway_conf['servers'].append(server)
 
 # Add up to 3 additional servers
-if(os.getenv('SERVER_1', True)):
+if(os.getenv('SERVER_1_ENABLED', False)):
   server = {}
   if(os.getenv('SERVER_1_TYPE', "semtech")=="ttn"):
     server['serv_type'] = "ttn"
   server['server_address'] = os.environ.get("SERVER_1_ADDRESS")
   server['serv_gw_id'] = os.environ.get("SERVER_1_GWID")
   server['serv_gw_key'] = os.environ.get("SERVER_1_GWKEY")
-  if(os.getenv('SERVER_1_ENABLED', "true")=="true"):
+  if(os.getenv('SERVER_1_ENABLED', "false")=="true"):
     server['serv_enabled'] = True
   else:
     server['serv_enabled'] = False
   gateway_conf['servers'].append(server)
 
-if(os.getenv('SERVER_2', True)):
+if(os.getenv('SERVER_2_ENABLED', False)):
   server = {}
   if(os.getenv('SERVER_1_TYPE', "semtech")=="ttn"):
     server['serv_type'] = "ttn"
   server['server_address'] = os.environ.get("SERVER_1_ADDRESS")
   server['serv_gw_id'] = os.environ.get("SERVER_1_GWID")
   server['serv_gw_key'] = os.environ.get("SERVER_1_GWKEY")
-  if(os.getenv('SERVER_1_ENABLED', "true")=="true"):
+  if(os.getenv('SERVER_1_ENABLED', "false")=="true"):
     server['serv_enabled'] = True
   else:
     server['serv_enabled'] = False
   gateway_conf['servers'].append(server)
 
-if(os.getenv('SERVER_3', True)):
+if(os.getenv('SERVER_3_ENABLED', False)):
   server = {}
   if(os.getenv('SERVER_1_TYPE', "semtech")=="ttn"):
     server['serv_type'] = "ttn"
   server['server_address'] = os.environ.get("SERVER_1_ADDRESS")
   server['serv_gw_id'] = os.environ.get("SERVER_1_GWID")
   server['serv_gw_key'] = os.environ.get("SERVER_1_GWKEY")
-  if(os.getenv('SERVER_1_ENABLED', "true")=="true"):
+  if(os.getenv('SERVER_1_ENABLED', "false")=="true"):
     server['serv_enabled'] = True
   else:
     server['serv_enabled'] = False
@@ -223,7 +227,7 @@ if(os.getenv('SERVER_3', True)):
 # Write global_coonf
 local_conf = {'gateway_conf': gateway_conf}
 with open('local_conf.json', 'w') as the_file:
-  the_file.write(json.dumps(local_conf))
+  the_file.write(json.dumps(local_conf, indent=4))
 
 # Endless loop to reset and restart packet forwarder
 while True:
@@ -239,8 +243,10 @@ while True:
     time.sleep(0.1)
     GPIO.output(22, 0)
     time.sleep(0.1)
+    GPIO.cleanup(22)
 
   #TODO: reset other gateway boards
+
 
   # Start forwarder
   subprocess.call(["./mp_pkt_fwd"])
