@@ -10,6 +10,7 @@ import sys
 import urllib2
 import time
 import uuid
+import json
 import subprocess
 try:
     import RPi.GPIO as GPIO
@@ -65,8 +66,8 @@ print ("Gateway Type:\t"+os.environ.get("GW_TYPE"))
 print ("Gateway ID:\t"+os.environ.get("GW_ID"))
 print ("Gateway EUI:\t"+my_eui)
 print ("Gateway Key:\t"+os.environ.get("GW_KEY"))
-print ("Has hardware GPS: "+str(os.getenv('GW_GPS', False)))
-print ("Hardware GPS port: "+os.getenv('GW_GPS_PORT', "/dev/ttyAMA0"))
+print ("Has hardware GPS:\t"+str(os.getenv('GW_GPS', False)))
+print ("Hardware GPS port:\t"+os.getenv('GW_GPS_PORT', "/dev/ttyAMA0"))
 
 
 print ("*******************")
@@ -105,6 +106,7 @@ if(os.getenv('SERVER_TTN', True)):
   frequency_plan = ttn_config.get('frequency_plan')#, "EU_863_870")
   frequency_plan_url = ttn_config.get('frequency_plan_url')#, "https://account.thethingsnetwork.org/api/v2/frequency-plans/EU_863_870")
   router = ttn_config.get('router')#, "router.dev.thethings.network:1883")
+  router = router[:router.index(':')] #strip port from url, as the ttn library also adds this
 
   if "attributes" in ttn_config:
     description = ttn_config['attributes'].get('description', "")
@@ -120,8 +122,8 @@ if(os.getenv('SERVER_TTN', True)):
   print ("Frequency plan url:\t"+frequency_plan_url)
   print ("Gateway description:\t"+description)
   print ("Gateway placement:\t"+placement)
-  print ("Latitude:\t"+latitude)
-  print ("Longitude:\t"+longitude)
+  print ("Latitude:\t"+str(latitude))
+  print ("Longitude:\t"+str(longitude))
 # Done fetching config from TTN
 
 
