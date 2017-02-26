@@ -6,7 +6,7 @@ mkdir -p $INSTALL_DIR/dev
 cd $INSTALL_DIR/dev
 
 if [ ! -d wiringPi ]; then
-    git clone git://git.drogon.net/wiringPi
+    git clone git://git.drogon.net/wiringPi  || { echo 'Cloning wiringPi failed.' ; exit 1; }
     cd wiringPi
 else
     cd wiringPi
@@ -17,7 +17,7 @@ fi
 cd ..
 
 if [ ! -d lora_gateway ]; then
-    git clone https://github.com/kersing/lora_gateway.git
+    git clone https://github.com/kersing/lora_gateway.git  || { echo 'Cloning lora_gateway failed.' ; exit 1; }
 else
     cd lora_gateway
     git reset --hard
@@ -26,7 +26,7 @@ else
 fi
 
 if [ ! -d paho.mqtt.embedded-c ]; then
-    git clone https://github.com/kersing/paho.mqtt.embedded-c.git
+    git clone https://github.com/kersing/paho.mqtt.embedded-c.git  || { echo 'Cloning paho mqtt failed.' ; exit 1; }
 else
     cd paho.mqtt.embedded-c
     git reset --hard
@@ -35,7 +35,7 @@ else
 fi
 
 if [ ! -d ttn-gateway-connector ]; then
-    git clone https://github.com/kersing/ttn-gateway-connector.git
+    git clone https://github.com/kersing/ttn-gateway-connector.git  || { echo 'Cloning gateway connector failed.' ; exit 1; }
 else
     cd ttn-gateway-connector
     git reset --hard
@@ -44,7 +44,7 @@ else
 fi
 
 if [ ! -d protobuf-c ]; then
-    git clone https://github.com/kersing/protobuf-c.git
+    git clone https://github.com/kersing/protobuf-c.git  || { echo 'Cloning protobuf-c failed.' ; exit 1; }
 else
     cd protobuf-c
     git reset --hard
@@ -53,7 +53,7 @@ else
 fi
 
 if [ ! -d packet_forwarder ]; then
-    git clone https://github.com/kersing/packet_forwarder.git
+    git clone https://github.com/kersing/packet_forwarder.git  || { echo 'Cloning packet forwarder failed.' ; exit 1; }
 else
     cd packet_forwarder
     git reset --hard
@@ -62,7 +62,7 @@ else
 fi
 
 if [ ! -d protobuf ]; then
-    git clone https://github.com/google/protobuf.git
+    git clone https://github.com/google/protobuf.git  || { echo 'Cloning protobuf failed.' ; exit 1; }
 else
     cd protobuf
     git reset --hard
