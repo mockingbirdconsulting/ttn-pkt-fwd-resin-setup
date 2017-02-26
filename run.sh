@@ -145,18 +145,22 @@ echo -e "{\n\
 \t\t\"gps\": $GW_GPS,\n\
 \t\t\"gps_tty_path\": \"$GW_GPS_TTY_PATH\",\n\
 \t\t\"fake_gps\": $GW_FAKE_GPS,\n\
-\t\t\"gateway_ID\": \"0000000000000000\"\n\
+\t\t\"gateway_ID\": \"0000000000000000\",\n\
 \t\t\"servers\": [\n\
 \t\t{\
 \t\t\t\"serv_type\": \"ttn\",\n\
 \t\t\t\"serv_address\": \"router.$GW_REGION.thethings.network\",\n\
 \t\t\t\"serv_gw_id\": \"$GW_ID\",\n\
 \t\t\t\"serv_gw_key\": \"$GW_KEY\",\n\
-\t\t\t\"serv_enabled\", true
-\t\t}],\
+\t\t\t\"serv_enabled\": true\n\
+\t\t}]\n\
 \t}\n\
 }" >./local_conf.json
 
+echo "local_conf.json"
+echo "==============="
+cat local_conf.json
+echo "==============="
 
 echo "******************"
 # get gateway ID from its MAC address
@@ -224,7 +228,6 @@ do
     fi
 
     echo "[TTN Gateway]: Starting packet forwarder..."
-    cp /opt/ttn-gateway/dev/packet_forwarder/mp_pkt_fwd/mp_pkt_fwd mp_pkt_fwd
     ./mp_pkt_fwd
     echo "****************** $CUSTOM_RESET_PIN"
     echo "*** [TTN Gateway]: EXIT (retrying in 15s)"
