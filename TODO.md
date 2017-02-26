@@ -28,7 +28,11 @@
     "placement": "indoor"
   },
   "router": "router.dev.thethings.network:1883",
-  "location": null,
+  "location": {
+    "lng": 6.602717846679752,
+    "lat": 52.33979712058138
+  },
+  "altitude": 20,
   "owner": {
     "id": "######",
     "username": "jpmeijers"
