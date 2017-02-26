@@ -188,38 +188,57 @@ if(os.getenv('SERVER_1_ENABLED', False)):
   if(os.getenv('SERVER_1_TYPE', "semtech")=="ttn"):
     server['serv_type'] = "ttn"
   server['server_address'] = os.environ.get("SERVER_1_ADDRESS")
+  server['serv_port_up'] = os.environ.get("SERVER_1_PORTUP")
+  server['serv_port_down'] = os.environ.get("SERVER_1_PORTDOWN")
   server['serv_gw_id'] = os.environ.get("SERVER_1_GWID")
   server['serv_gw_key'] = os.environ.get("SERVER_1_GWKEY")
   if(os.getenv('SERVER_1_ENABLED', "false")=="true"):
     server['serv_enabled'] = True
   else:
     server['serv_enabled'] = False
+  if(os.getenv('SERVER_1_DOWNLINK', "false")=="true"):
+    server['serv_down_enabled'] = True
+  else:
+    server['serv_down_enabled'] = False
   gateway_conf['servers'].append(server)
 
 if(os.getenv('SERVER_2_ENABLED', False)):
   server = {}
-  if(os.getenv('SERVER_1_TYPE', "semtech")=="ttn"):
+  if(os.getenv('SERVER_2_TYPE', "semtech")=="ttn"):
     server['serv_type'] = "ttn"
-  server['server_address'] = os.environ.get("SERVER_1_ADDRESS")
-  server['serv_gw_id'] = os.environ.get("SERVER_1_GWID")
-  server['serv_gw_key'] = os.environ.get("SERVER_1_GWKEY")
-  if(os.getenv('SERVER_1_ENABLED', "false")=="true"):
+  server['server_address'] = os.environ.get("SERVER_2_ADDRESS")
+  server['serv_port_up'] = os.environ.get("SERVER_2_PORTUP")
+  server['serv_port_down'] = os.environ.get("SERVER_2_PORTDOWN")
+  server['serv_gw_id'] = os.environ.get("SERVER_2_GWID")
+  server['serv_gw_key'] = os.environ.get("SERVER_2_GWKEY")
+  if(os.getenv('SERVER_2_ENABLED', "false")=="true"):
     server['serv_enabled'] = True
   else:
     server['serv_enabled'] = False
+  if(os.getenv('SERVER_2_DOWNLINK', "false")=="true"):
+    server['serv_down_enabled'] = True
+  else:
+    server['serv_down_enabled'] = False
   gateway_conf['servers'].append(server)
 
 if(os.getenv('SERVER_3_ENABLED', False)):
   server = {}
-  if(os.getenv('SERVER_1_TYPE', "semtech")=="ttn"):
+  if(os.getenv('SERVER_3_TYPE', "semtech")=="ttn"):
     server['serv_type'] = "ttn"
-  server['server_address'] = os.environ.get("SERVER_1_ADDRESS")
-  server['serv_gw_id'] = os.environ.get("SERVER_1_GWID")
-  server['serv_gw_key'] = os.environ.get("SERVER_1_GWKEY")
-  if(os.getenv('SERVER_1_ENABLED', "false")=="true"):
+  server['server_address'] = os.environ.get("SERVER_3_ADDRESS")
+  server['serv_port_up'] = os.environ.get("SERVER_3_PORTUP")
+  server['serv_port_down'] = os.environ.get("SERVER_3_PORTDOWN")
+  server['serv_gw_id'] = os.environ.get("SERVER_3_GWID")
+  server['serv_gw_key'] = os.environ.get("SERVER_3_GWKEY")
+  if(os.getenv('SERVER_3_ENABLED', "false")=="true"):
     server['serv_enabled'] = True
   else:
     server['serv_enabled'] = False
+  if(os.getenv('SERVER_3_DOWNLINK', "false")=="true"):
+    server['serv_down_enabled'] = True
+  else:
+    server['serv_down_enabled'] = False
+  
   gateway_conf['servers'].append(server)
 
 
