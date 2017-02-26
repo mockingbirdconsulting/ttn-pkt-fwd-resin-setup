@@ -18,7 +18,7 @@ except RuntimeError:
 
 GWID_PREFIX="FFFE"
 
-if not os.path.exists("mp_pkg_fwd"):
+if not os.path.exists("mp_pkt_fwd"):
   print ("ERROR: gateway executable not found. Is it built yet?")
   sys.exit(0)
 
@@ -65,7 +65,7 @@ print ("Gateway Type:\t"+os.environ.get("GW_TYPE"))
 print ("Gateway ID:\t"+os.environ.get("GW_ID"))
 print ("Gateway EUI:\t"+my_eui)
 print ("Gateway Key:\t"+os.environ.get("GW_KEY"))
-print ("Has hardware GPS: "+os.getenv('GW_GPS', False))
+print ("Has hardware GPS: "+str(os.getenv('GW_GPS', False)))
 print ("Hardware GPS port: "+os.getenv('GW_GPS_PORT', "/dev/ttyAMA0"))
 
 
