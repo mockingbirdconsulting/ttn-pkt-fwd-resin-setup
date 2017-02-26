@@ -99,6 +99,6 @@ cd $INSTALL_DIR/dev/packet_forwarder/mp_pkt_fwd/
 make
 
 # Copy things needed at runtime to where they'll be expected
-cp $BUILD_DIR/packet_forwarder/mp_pkt_fwd/mp_pkt_fwd $INSTALL_DIR/mp_pkt_fwd
+cp $INSTALL_DIR/dev/packet_forwarder/mp_pkt_fwd/mp_pkt_fwd $INSTALL_DIR/mp_pkt_fwd
 
 echo "Build & Installation Completed."
