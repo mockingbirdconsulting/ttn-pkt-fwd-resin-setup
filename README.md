@@ -1,8 +1,8 @@
 # TTN Gateway for Raspberry Pi
 
-Resin Dockerfile & scripts for [The Things Network](http://thethingsnetwork.org/) gateways based on the Raspberry Pi.
+Resin Dockerfile & scripts for [The Things Network](http://thethingsnetwork.org/) gateways based on the Raspberry Pi. This updated version uses the gateway connector protocol, not the old packet forwarder. See the [TTN documentation on Gateway Registration](https://www.thethingsnetwork.org/docs/gateways/registration.html).
 
-It supports two configuration types, based on the gateway hardware you're attaching to your Raspberry Pi:
+Two gateway boards are supported, but need to be used with a Raspberry Pi:
 
 1. "linklabs-dev", a [LinkLabs Raspberry Pi "Hat"](http://link-labs.myshopify.com/products/lorawan-raspberry-pi-board)
 2. "imst-ic880a-spi", an [IMST iC880A-SPI](http://webshop.imst.de/ic880a-spi-lorawan-concentrator-868mhz.html) configured as described [here](https://github.com/ttn-zh/ic880a-gateway/tree/spi)
@@ -10,9 +10,10 @@ It supports two configuration types, based on the gateway hardware you're attach
 
 ## PREREQUISITES
 
-1. Build your hardware
-2. Create and sign into an account at http://resin.io, which is the central "device dashboard".  By using this dashboard you will be able to create the "boot SD" for your Raspberry pi.  When you use that SD card, Resin will recognize that Raspberry Pi as belonging to you, will then deliver the gateway software to your RPi, and will subsequently keep your RPi up-to-date with future updates to the gateway software.
-3. Clone **this** github repo to your mac/pc.  That desktop repo will be subsequently used to instruct resin.io  what software to place on your gateway(s).
+1. Build your hardware.
+2. Create a new gateway that uses `gateway connector` on the [TTN Console](https://console.thethingsnetwork.org/gateways). Also set the location and altitude of your gateway. We will come back to this console later to obtain the gateway ID and access key.
+3. Create and sign into an account at http://resin.io, which is the central "device dashboard".  By using this dashboard you will be able to create the "boot SD" for your Raspberry pi.  When you use that SD card, Resin will recognize that Raspberry Pi as belonging to you, will then deliver the gateway software to your RPi, and will subsequently keep your RPi up-to-date with future updates to the gateway software.
+4. Clone **this** github repo to your mac/pc.  That desktop repo will be subsequently used to instruct resin.io  what software to place on your gateway(s).
 
 ## PREPARING YOUR FIRST GATEWAY DEVICE FOR RESIN.IO
 
@@ -31,24 +32,25 @@ DEVICE ENVIRONMENT VARIABLES
 Name      	  	  | Value  
 ------------------|--------------------------  
 GW_TYPE           | imst-ic880a-spi
-GW_REGION         | EU
 GW_CONTACT_EMAIL  | yourname@yourdomain.com     
-GW_DESCRIPTION    | your-gateway-1  
-GW_FAKE_GPS		  | true
-GW_REF_LATITUDE   | 52.376364       
-GW_REF_LONGITUDE  | 4.884232          
-GW_REF_ALTITUDE   | 3          
+GW_DESCRIPTION    | your-gateway-1 
+GW_ID             | The gateway ID from the TTN console
+GW_KEY            | The gateway KEY from the TTN console
 
-On the other hand, for the LinkLabs gateway, which has a built-in GPS, you only need TYPE, REGION, CONTACT_EMAIL, and DESCRIPTION.
+On the other hand, for the LinkLabs gateway, which has a built-in GPS, you only need:
 
 DEVICE ENVIRONMENT VARIABLES  
 
 Name      	  	  | Value  
 ------------------|--------------------------  
 GW_TYPE           | linklabs-dev
-GW_REGION         | EU
 GW_CONTACT_EMAIL  | yourname@yourdomain.com     
-GW_DESCRIPTION    | your-gateway-1  
+GW_DESCRIPTION    | your-gateway-1
+GW_ID             | The gateway ID from the TTN console
+GW_KEY            | The gateway KEY from the TTN console
+GW_GPS            | true
+
+For a more complete list of possible environment variables, see CONFIGURATION.md.
 
 SPECIAL Note for using the LinkLabs gateway on a Raspberry Pi 3:
 
@@ -98,6 +100,8 @@ RESIN_HOST_CONFIG_core_freq   | 250
   git add .
   git commit -m "Updated gateway version"
   git push resin master"
+  
+- For devices without a GPS, the location that is configured on the TTN console is used. This location is only read at startup of the gateway. Therefore, after you set or changed the location, restart the application from the resin.io console.
 
 # Credits
 
