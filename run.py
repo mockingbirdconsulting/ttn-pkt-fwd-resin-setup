@@ -4,7 +4,7 @@ Author: JP Meijers
 Date: 2017-02-26
 Based on: https://github.com/rayozzie/ttn-resin-gateway-rpi/blob/master/run.sh
 """
-import os.environ
+import os
 import os.path
 import sys
 import urllib2
@@ -146,12 +146,12 @@ gateway_conf['contact_email'] = os.getenv('GW_CONTACT_EMAIL', "")
 gateway_conf['description'] = description
 
 # Use hardware GPS
-if(os.getenv('GW_GPS', True):
+if(os.getenv('GW_GPS', True)):
   gateway_conf['gps'] = True
   gateway_conf['fake_gps'] = False
   gateway_conf['gps_tty_path'] = os.getenv('GW_GPS_PORT', "/dev/ttyAMA0")
 # Use fake GPS with coordinates from TTN
-if(os.getenv('GW_GPS', False) and latitude!=0 and longitude!=0))
+if(os.getenv('GW_GPS', False) and latitude!=0 and longitude!=0):
   gateway_conf['gps'] = True
   gateway_conf['fake_gps'] = True
   gateway_conf['ref_latitude'] = latitude
