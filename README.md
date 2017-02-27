@@ -27,7 +27,7 @@ Two gateway boards are supported, but need to be used with a Raspberry Pi:
 
 Click the "Environment Variables" section at the left side of the screen. This will allow you to configure environment parameters for this and only this device, and which will be appropriately inserted into this device's "local_conf.json" with lowercase tuple names derived from the appropriate uppercase environment names beginning with "GW_".  For example, for an IMST gateway with no GPS, the MINIMUM environment variables that you should configure at this screen should look something like this:
 
-DEVICE ENVIRONMENT VARIABLES  
+#### DEVICE ENVIRONMENT VARIABLES  
 
 Name      	  	  | Value  
 ------------------|--------------------------  
@@ -38,7 +38,7 @@ GW_KEY            | The gateway KEY from the TTN console
 
 On the other hand, for the LinkLabs gateway, which has a built-in GPS, you only need:
 
-DEVICE ENVIRONMENT VARIABLES  
+#### DEVICE ENVIRONMENT VARIABLES  
 
 Name      	  	  | Value  
 ------------------|--------------------------  
@@ -50,7 +50,7 @@ GW_GPS            | true
 
 For a more complete list of possible environment variables, see CONFIGURATION.md.
 
-SPECIAL Note for using the LinkLabs gateway on a Raspberry Pi 3:
+### SPECIAL Note for using the LinkLabs gateway on a Raspberry Pi 3
 
 There is a backward incomatibility between the Raspberry Pi 1 and 2 hardware, and Raspberry Pi 3.  For Raspberry Pi 3, it is necessary to make a small additional configuration change.
 
@@ -58,7 +58,7 @@ Click <- to go back to the Device List, and note that on the left there is an op
 
 Add a New config variable as follows:
 
-APPLICATION CONFIG VARIABLES  
+#### APPLICATION CONFIG VARIABLES  
 
 Name      	            	  | Value  
 ------------------------------|--------------------------  
@@ -103,7 +103,7 @@ RESIN_HOST_CONFIG_core_freq   | 250
 
 # Credits
 
-[Gonzalo Casas](https://github.com/gonzalocasas) on the [iC880a-based gateway](https://github.com/ttn-zh/ic880a-gateway/tree/spi)  
-[Ruud Vlaming](https://github.com/devlaam) on the [Lorank8 installer](https://github.com/Ideetron/Lorank)  
-[The Team](https://resin.io/team/) at resin.io   
-[Jac Kersing](https://github.com/kersing) for writing the new Multi-protocol packet forwarder.
+[Gonzalo Casas](https://github.com/gonzalocasas) on the [iC880a-based gateway](https://github.com/ttn-zh/ic880a-gateway/tree/spi)
+[Ruud Vlaming](https://github.com/devlaam) on the [Lorank8 installer](https://github.com/Ideetron/Lorank)
+[Jac Kersing](https://github.com/kersing) on the [Multi-protocol packet forwarder](https://github.com/kersing/packet_forwarder/tree/master/mp_pkt_fwd)
+[The Team](https://resin.io/team/) at resin.io
