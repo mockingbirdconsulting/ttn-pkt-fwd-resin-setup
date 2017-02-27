@@ -72,11 +72,11 @@ RESIN_HOST_CONFIG_core_freq   | 250
    git remote add resin youraccount@git.resin.io:youraccount/yourapplication.git
 
 3. Type the following commands into terminal to "push" the TTN files up to resin.io:
-
+   ```
    git add .
    git -m "first upload of ttn files to resin"
    git push resin master
-
+   ```
 5. What you'll now see happening in terminal is that this "git push" does an incredible amount of work:
 
    a) It will upload a Dockerfile, a "build script", and a "run script" to resin
