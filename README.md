@@ -32,8 +32,7 @@ DEVICE ENVIRONMENT VARIABLES
 Name      	  	  | Value  
 ------------------|--------------------------  
 GW_TYPE           | imst-ic880a-spi
-GW_CONTACT_EMAIL  | yourname@yourdomain.com     
-GW_DESCRIPTION    | your-gateway-1 
+GW_CONTACT_EMAIL  | yourname@yourdomain.com
 GW_ID             | The gateway ID from the TTN console
 GW_KEY            | The gateway KEY from the TTN console
 
@@ -44,8 +43,7 @@ DEVICE ENVIRONMENT VARIABLES
 Name      	  	  | Value  
 ------------------|--------------------------  
 GW_TYPE           | linklabs-dev
-GW_CONTACT_EMAIL  | yourname@yourdomain.com     
-GW_DESCRIPTION    | your-gateway-1
+GW_CONTACT_EMAIL  | yourname@yourdomain.com
 GW_ID             | The gateway ID from the TTN console
 GW_KEY            | The gateway KEY from the TTN console
 GW_GPS            | true
