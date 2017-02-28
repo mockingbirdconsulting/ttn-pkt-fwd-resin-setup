@@ -60,7 +60,9 @@ if os.environ.get("GW_KEY")==None:
   print ("See https://www.thethingsnetwork.org/docs/gateways/registration.html#via-gateway-connector")
   sys.exit(0)
 
-my_eui = GWID_PREFIX + format(uuid.getnode(), '012x')
+# The FFFE should be inserted in the middle (so xxxxxxFFFExxxxxx)
+my_eui = format(uuid.getnode(), '012x')
+my_eui = my_eui[:6]+GWID_PREFIX+my_eui[6:]
 my_eui = my_eui.upper()
 
 print ("Gateway Type:\t"+os.environ.get("GW_TYPE"))
