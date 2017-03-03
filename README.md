@@ -67,25 +67,27 @@ RESIN_HOST_CONFIG_core_freq   | 250
 ## TRANSFERRING TTN GATEWAY SOFTWARE TO RESIN SO THAT IT MAY BE DOWNLOADED ON YOUR DEVICES
 
 1. On your Mac or PC, in terminal, change your working directory to the directory that is the clone of this git repo:
-   ```
+
+   ```bash
    git clone https://github.com/jpmeijers/ttn-resin-gateway-rpi.git
    ```
 2. Now, type the command that you'll see displayed in the edit control in the upper-right corner of the Resin devices dashboard for your device. This command "connects" your local directory to the resin GIT service, which uses GIT to "receive" the gateway software from TTN, and it looks something like this:
 
+   ```bash
    git remote add resin youraccount@git.resin.io:youraccount/yourapplication.git
-
-3. Type the following commands into terminal to "push" the TTN files up to resin.io:
    ```
+3. Type the following commands into terminal to "push" the TTN files up to resin.io:
+
+   ```bash
    git add .
    git commit -m "first upload of ttn files to resin"
    git push resin master
    ```
 5. What you'll now see happening in terminal is that this "git push" does an incredible amount of work:
-
-   a) It will upload a Dockerfile, a "build script", and a "run script" to resin
-   b) It will start to do a "docker build" using that Dockerfile, running it within a QEMU ARM virtual machine on the resin service.
-   c) In processing this docker build, it will run a "build.sh" script that downloads and builds the packet forwarder executable from source code, for RPi+iC880A-SPI.
-   d) When the build is completed, you'll see a unicorn ASCII graphic displayed in your terminal.
+  1. It will upload a Dockerfile, a "build script", and a "run script" to resin
+  2. It will start to do a "docker build" using that Dockerfile, running it within a QEMU ARM virtual machine on the resin service.
+  3. In processing this docker build, it will run a "build.sh" script that downloads and builds the packet forwarder executable from source code, for RPi+iC880A-SPI.
+  4. When the build is completed, you'll see a unicorn &#x1f984; ASCII graphic displayed in your terminal.
 
 6. Now, switch back to your device dashboard, you'll see that your Raspberry Pi is now "updating" by pulling the Docker container from the resin.io service.  Then, after "updating", you'll see the gateway's log file in the window at the lower right corner.  You'll see it initializing, and will also see log output each time a packet is forwarded to TTN.  You're done!
 
