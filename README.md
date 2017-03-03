@@ -66,7 +66,10 @@ RESIN_HOST_CONFIG_core_freq   | 250
 
 ## TRANSFERRING TTN GATEWAY SOFTWARE TO RESIN SO THAT IT MAY BE DOWNLOADED ON YOUR DEVICES
 
-1. On your Mac or PC, in terminal, change your working directory to the directory that is the clone of **this** git repo.
+1. On your Mac or PC, in terminal, change your working directory to the directory that is the clone of this git repo:
+   ```
+   git clone https://github.com/jpmeijers/ttn-resin-gateway-rpi.git
+   ```
 2. Now, type the command that you'll see displayed in the edit control in the upper-right corner of the Resin devices dashboard for your device. This command "connects" your local directory to the resin GIT service, which uses GIT to "receive" the gateway software from TTN, and it looks something like this:
 
    git remote add resin youraccount@git.resin.io:youraccount/yourapplication.git
