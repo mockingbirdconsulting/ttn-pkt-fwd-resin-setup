@@ -252,11 +252,27 @@ with open('local_conf.json', 'w') as the_file:
 
 # Endless loop to reset and restart packet forwarder
 while True:
-  # Reset the gateway board
-  GPIO.setmode(GPIO.BCM) # hardware pin numbers, just like gpio -1
+  # Reset the gateway board - this only works for the Raspberry Pi.
+  GPIO.setmode(GPIO.BOARD) # hardware pin numbers, just like gpio -1
 
-  if (os.environ.get("GW_TYPE")=="imst-ic880a-spi"):
-    print ("[TTN Gateway]: Toggling reset pin on IMST iC880A-SPI Board")
+  if (os.environ.get("GW_RESET_PIN")!=""):
+    try:
+      pin_number = int(os.environ.get("GW_RESET_PIN"))
+      print ("[TTN Gateway]: Resetting concentrator on pin "+os.environ.get("GW_RESET"))
+      GPIO.setup(pin_number, GPIO.OUT, initial=GPIO.LOW)
+      GPIO.output(pin_number, 0)
+      time.sleep(0.1)
+      GPIO.output(pin_number, 1)
+      time.sleep(0.1)
+      GPIO.output(pin_number, 0)
+      time.sleep(0.1)
+      GPIO.input(pin_number)
+      GPIO.cleanup(pin_number)
+    except ValueError:
+      print ("Can't interpret "+os.environ.get("GW_RESET_PIN")+" as a valid pin number.")
+
+  else:
+    print ("[TTN Gateway]: Resetting concentrator on default pin 22.")
     GPIO.setup(22, GPIO.OUT, initial=GPIO.LOW)
     GPIO.output(22, 0)
     time.sleep(0.1)
@@ -264,10 +280,8 @@ while True:
     time.sleep(0.1)
     GPIO.output(22, 0)
     time.sleep(0.1)
+    GPIO.input(22)
     GPIO.cleanup(22)
-
-  #TODO: reset other gateway boards
-
 
   # Start forwarder
   subprocess.call(["./mp_pkt_fwd"])

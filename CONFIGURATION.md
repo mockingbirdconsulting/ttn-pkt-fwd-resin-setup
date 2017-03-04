@@ -1,12 +1,13 @@
 #Environment Variables
 ##Required global variables
-* GW_TYPE required
 * GW_ID required
 * GW_KEY required
 * GW_CONTACT_EMAIL required - default an empty string
   The gateway owner's contact information.
 
 ##Optional global variables
+* GW_RESET_PIN - default 22
+  The physical pin number on the Raspberry Pi to which the concentrator's reset is connected. If you followed the [TTN-ZH instruction](https://github.com/ttn-zh/ic880a-gateway/wiki), or used [Gonzalo Casas' backplane board](https://www.tindie.com/stores/gnz/), this is most likely pin number 22. As pin 22 is the default value, you do not need to define it in this case.
 * GW_GPS optional - default False
   * If True, use the hardware GPS. 
   * If False, 
