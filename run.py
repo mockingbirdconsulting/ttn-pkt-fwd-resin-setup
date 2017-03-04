@@ -45,11 +45,6 @@ print ("*******************")
 print ("*** Configuration:")
 print ("*******************")
 
-if os.environ.get("GW_TYPE")==None:
-  print ("ERROR: GW_TYPE required")
-  print ("See https://github.com/rayozzie/ttn-resin-gateway-rpi/blob/master/README.md")
-  sys.exit(0)
-
 if os.environ.get("GW_ID")==None:
   print ("ERROR: GW_ID required")
   print ("See https://www.thethingsnetwork.org/docs/gateways/registration.html#via-gateway-connector")
