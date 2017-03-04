@@ -60,7 +60,6 @@ my_eui = format(uuid.getnode(), '012x')
 my_eui = my_eui[:6]+GWID_PREFIX+my_eui[6:]
 my_eui = my_eui.upper()
 
-print ("Gateway Type:\t"+os.environ.get("GW_TYPE"))
 print ("Gateway ID:\t"+os.environ.get("GW_ID"))
 print ("Gateway EUI:\t"+my_eui)
 print ("Gateway Key:\t"+os.environ.get("GW_KEY"))
