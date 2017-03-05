@@ -249,7 +249,7 @@ while True:
   # Reset the gateway board - this only works for the Raspberry Pi.
   GPIO.setmode(GPIO.BOARD) # hardware pin numbers, just like gpio -1
 
-  if (os.environ.get("GW_RESET_PIN")!=""):
+  if (os.environ.get("GW_RESET_PIN")!="" and os.environ.get("GW_RESET_PIN")!=None):
     try:
       pin_number = int(os.environ.get("GW_RESET_PIN"))
       print ("[TTN Gateway]: Resetting concentrator on pin "+os.environ.get("GW_RESET"))
