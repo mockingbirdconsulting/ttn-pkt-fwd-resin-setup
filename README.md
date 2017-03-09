@@ -35,8 +35,9 @@ GW_TYPE           | imst-ic880a-spi
 GW_CONTACT_EMAIL  | yourname@yourdomain.com
 GW_ID             | The gateway ID from the TTN console
 GW_KEY            | The gateway KEY from the TTN console
+GW_RESET_PIN      | 22
 
-On the other hand, for the LinkLabs gateway, which has a built-in GPS, you only need:
+On the other hand, for the LinkLabs gateway, which has a built-in GPS, you need:
 
 DEVICE ENVIRONMENT VARIABLES  
 
@@ -47,8 +48,28 @@ GW_CONTACT_EMAIL  | yourname@yourdomain.com
 GW_ID             | The gateway ID from the TTN console
 GW_KEY            | The gateway KEY from the TTN console
 GW_GPS            | true
+GW_RESET_PIN      | 29
 
 For a more complete list of possible environment variables, see [CONFIGURATION](CONFIGURATION.md).
+
+### Reset pin values
+
+Depending on the way you connect the concentrator board to the Raspberry Pi, the reset pin of the concentrator might be on a different GPIO pin of the Raspberry Pi. Here follows a table of the most common backplane boards used, and the reset pin number you should use in the `GW_RESET_PIN` environment variable.
+
+Note that the reset pin you should define is the physical pin number on the Raspberry Pi. To translate between different numbering schemes you can use [pinout.xyz](https://pinout.xyz/).
+
+Backplane         | Reset pin
+--------------------------------------
+Gonzalo Casas backplane<br \>https://github.com/gonzalocasas/ic880a-backplane<br \>https://www.tindie.com/stores/gnz/ | 22
+ch2i<br \>https://github.com/ch2i/iC880A-Raspberry-PI | 11
+Linklabs Rasberry Pi Hat | 29 (untested)
+Rising HF Board | 26 (untested)
+
+
+If you get the message
+`ERROR: [main] failed to start the concentrator`
+after resin.io is finished downloading the application, or when restarting the gateway, it most likely means the `GW_RESET_PIN` you defined is incorrect.
+
 
 ### SPECIAL Note for using the LinkLabs gateway on a Raspberry Pi 3
 
