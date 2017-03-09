@@ -100,10 +100,14 @@ if(os.getenv('SERVER_TTN', True)):
     print ("Unable to parse configuration from TTN")
     sys.exit(0)
 
-  frequency_plan = ttn_config.get('frequency_plan')#, "EU_863_870")
-  frequency_plan_url = ttn_config.get('frequency_plan_url')#, "https://account.thethingsnetwork.org/api/v2/frequency-plans/EU_863_870")
-  router = ttn_config.get('router').get('mqtt_address')#, "router.dev.thethings.network:1883")
-  router = router[:router.index(':')] #strip port from url, as this is added by mp_pkt_fwd
+  frequency_plan = ttn_config.get('frequency_plan', "EU_863_870")
+  frequency_plan_url = ttn_config.get('frequency_plan_url', "https://account.thethingsnetwork.org/api/v2/frequency-plans/EU_863_870")
+
+  if "router" in ttn_config:
+    router = ttn_config.['router'].get('mqtt_address', "router.dev.thethings.network:1883")
+    router = router[:router.index(':')] #strip port from url, as this is added by mp_pkt_fwd
+  else:
+    router = "router.dev.thethings.network"
 
   if "attributes" in ttn_config:
     description = ttn_config['attributes'].get('description', "")
