@@ -89,7 +89,7 @@ if(os.getenv('SERVER_TTN', True)):
     response = urllib2.urlopen(req, timeout=30)
     config_response = response.read()
   except urllib2.URLError as err: 
-    print ("Unable to fetch configuration from TTN")
+    print ("Unable to fetch configuration from TTN. Are your GW_ID and GW_KEY correct?")
     sys.exit(0)
 
   # Parse config
@@ -104,7 +104,7 @@ if(os.getenv('SERVER_TTN', True)):
   frequency_plan_url = ttn_config.get('frequency_plan_url', "https://account.thethingsnetwork.org/api/v2/frequency-plans/EU_863_870")
 
   if "router" in ttn_config:
-    router = ttn_config.['router'].get('mqtt_address', "router.dev.thethings.network:1883")
+    router = ttn_config['router'].get('mqtt_address', "router.dev.thethings.network:1883")
     router = router[:router.index(':')] #strip port from url, as this is added by mp_pkt_fwd
   else:
     router = "router.dev.thethings.network"
