@@ -59,7 +59,7 @@ Depending on the way you connect the concentrator board to the Raspberry Pi, the
 Note that the reset pin you should define is the physical pin number on the Raspberry Pi. To translate between different numbering schemes you can use [pinout.xyz](https://pinout.xyz/).
 
 Backplane         | Reset pin
---------------------------------------
+------------------|-----------
 Gonzalo Casas backplane<br \>https://github.com/gonzalocasas/ic880a-backplane<br \>https://www.tindie.com/stores/gnz/ | 22
 ch2i<br \>https://github.com/ch2i/iC880A-Raspberry-PI | 11
 Linklabs Rasberry Pi Hat | 29 (untested)
