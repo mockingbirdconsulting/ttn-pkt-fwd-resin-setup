@@ -81,7 +81,7 @@ RESIN_HOST_CONFIG_core_freq   | 250
    ```bash
    git add .
    git commit -m "first upload of ttn files to resin"
-   git push resin master
+   git push -f resin master
    ```
 5. What you'll now see happening in terminal is that this "git push" does an incredible amount of work:
   1. It will upload a Dockerfile, a "build script", and a "run script" to resin
@@ -102,7 +102,7 @@ RESIN_HOST_CONFIG_core_freq   | 250
   Edit the Dockerfile to bump the TTN_GATEWAY_VERSION number
   git add .
   git commit -m "Updated gateway version"
-  git push resin master"
+  git push -f resin master"
   
 - For devices without a GPS, the location that is configured on the TTN console is used. This location is only read at startup of the gateway. Therefore, after you set or changed the location, restart the application from the resin.io console.
 
