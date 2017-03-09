@@ -269,7 +269,7 @@ while True:
   if (os.environ.get("GW_RESET_PIN")!=None):
     try:
       pin_number = int(os.environ.get("GW_RESET_PIN"))
-      print ("[TTN Gateway]: Resetting concentrator on pin "+os.environ.get("GW_RESET"))
+      print ("[TTN Gateway]: Resetting concentrator on pin "+str(os.environ.get("GW_RESET_PIN")))
       GPIO.setup(pin_number, GPIO.OUT, initial=GPIO.LOW)
       GPIO.output(pin_number, 0)
       time.sleep(0.1)
