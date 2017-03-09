@@ -113,18 +113,30 @@ if(os.getenv('SERVER_TTN', True)):
     description = ttn_config['attributes'].get('description', "")
     placement = ttn_config['attributes'].get('placement', "unknown")
 
-  if "location" in ttn_config:
-    latitude = ttn_config['location'].get('lat', 0)
-    longitude = ttn_config['location'].get('lng', 0)
-  altitude = ttn_config.get('altitude', 0)
+  if "antenna_location" in ttn_config:
+    latitude = ttn_config['antenna_location'].get('latitude', 0)
+    longitude = ttn_config['antenna_location'].get('longitude', 0)
+    altitude = ttn_config['antenna_location'].get('altitude', 0)
 
-  print ("Router:\t"+router)
-  print ("Frequency plan:\t"+frequency_plan)
+  fallback_routers = []
+  if "fallback_routers" in ttn_config:
+    for fb_router in ttn_config["fallback_routers"]:
+      if "mqtt_address" in fb_router:
+        fallback_routers.append(fb_router["mqtt_address"])
+
+
+  print ("Router:\t\t\t"+router)
+  print ("Frequency plan:\t\t"+frequency_plan)
   print ("Frequency plan url:\t"+frequency_plan_url)
   print ("Gateway description:\t"+description)
   print ("Gateway placement:\t"+placement)
-  print ("Latitude:\t"+str(latitude))
-  print ("Longitude:\t"+str(longitude))
+  print ("Latitude:\t\t"+str(latitude))
+  print ("Longitude:\t\t"+str(longitude))
+  print ("Altitude:\t\t"+str(altitude))
+  print ("")
+  print ("Fallback routers:")
+  for fb_router in fallback_routers:
+    print ("\t"+fb_router)
 # Done fetching config from TTN
 
 
@@ -177,6 +189,7 @@ if(os.getenv('SERVER_TTN', True)):
   server = {}
   server['serv_type'] = "ttn"
   server['server_address'] = router
+  server['server_fallbacks'] = fallback_routers
   server['serv_gw_id'] = os.environ.get("GW_ID")
   server['serv_gw_key'] = os.environ.get("GW_KEY")
   server['serv_enabled'] = True
