@@ -13,9 +13,9 @@ import uuid
 import json
 import subprocess
 try:
-    import RPi.GPIO as GPIO
+  import RPi.GPIO as GPIO
 except RuntimeError:
-    print("Error importing RPi.GPIO!  This is probably because you need superuser privileges.  You can achieve this by using 'sudo' to run your script")
+  print("Error importing RPi.GPIO!  This is probably because you need superuser privileges.  You can achieve this by using 'sudo' to run your script")
 
 GWID_PREFIX="FFFE"
 
@@ -29,14 +29,14 @@ if os.environ.get('HALT') != None:
 
 # Show info about the machine we're running on
 print ("*** Resin Machine Info:")
-print ("*** Type: "+os.environ.get('RESIN_MACHINE_NAME'))
-print ("*** Arch: "+os.environ.get('RESIN_ARCH'))
+print ("*** Type: "+str(os.environ.get('RESIN_MACHINE_NAME')))
+print ("*** Arch: "+str(os.environ.get('RESIN_ARCH')))
 
 if os.environ.get("RESIN_HOST_CONFIG_core_freq")!=None:
-  print ("*** Core freq: "+os.environ.get('RESIN_HOST_CONFIG_core_freq'))
+  print ("*** Core freq: "+str(os.environ.get('RESIN_HOST_CONFIG_core_freq')))
 
 if os.environ.get("RESIN_HOST_CONFIG_dtoverlay")!=None:
-  print ("*** UART mode: "+os.environ.get('RESIN_HOST_CONFIG_dtoverlay'))
+  print ("*** UART mode: "+str(os.environ.get('RESIN_HOST_CONFIG_dtoverlay')))
 
 
 # Check if the correct environment variables are set
@@ -102,8 +102,8 @@ if(os.getenv('SERVER_TTN', True)):
 
   frequency_plan = ttn_config.get('frequency_plan')#, "EU_863_870")
   frequency_plan_url = ttn_config.get('frequency_plan_url')#, "https://account.thethingsnetwork.org/api/v2/frequency-plans/EU_863_870")
-  router = ttn_config.get('router')#, "router.dev.thethings.network:1883")
-  router = router[:router.index(':')] #strip port from url, as the ttn library also adds this
+  router = ttn_config.get('router').get('mqtt_address')#, "router.dev.thethings.network:1883")
+  router = router[:router.index(':')] #strip port from url, as this is added by mp_pkt_fwd
 
   if "attributes" in ttn_config:
     description = ttn_config['attributes'].get('description', "")
