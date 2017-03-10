@@ -1,58 +1,66 @@
-# TTN Gateway for Raspberry Pi
+# WARNING: Beta, unstable, testing software
+This resin.io setup is based on the [Multi-protocol Packet Forwarder by Jac Kersing](https://github.com/kersing/packet_forwarder/tree/master/mp_pkt_fwd). His packet forwarder, as well as this resin.io setup, are changing constantly. You therefore need to `git pull origin master` and `git push -f resin master` at least once a week to make sure your gateway is running the latest software.
+
+If you want a stable gateway setup, stick to the [old poly-packet-forwarder resin.io setup](https://github.com/rayozzie/ttn-resin-gateway-rpi) for now. You will be able to update from the old one to this repo quite seamlessly in the future.
+
+# Resin.io TTN Gateway Connector for Raspberry Pi
 
 Resin Dockerfile & scripts for [The Things Network](http://thethingsnetwork.org/) gateways based on the Raspberry Pi. This updated version uses the gateway connector protocol, not the old packet forwarder. See the [TTN documentation on Gateway Registration](https://www.thethingsnetwork.org/docs/gateways/registration.html).
 
-Currently two gateway setups are supported:
+Currently any Raspberry Pi with one of the following gateway boards, communicating over SPI, are supported, but not limited to these:
+* [IMST iC880A-SPI](http://webshop.imst.de/ic880a-spi-lorawan-concentrator-868mhz.html). Preferable configured as described [by TTN-ZH](https://github.com/ttn-zh/ic880a-gateway/wiki). You **do not** need to follow the **Setting up the software** step, as the setup scripts in this repository does it for you.
+* [LinkLabs Raspberry Pi "Hat"](http://link-labs.myshopify.com/products/lorawan-raspberry-pi-board)
+* [RisingHF IoT Dicovery](http://www.risinghf.com/product/risinghf-iot-dicovery/?lang=en)
 
-1. Raspberry Pi + IMST [IMST iC880A-SPI](http://webshop.imst.de/ic880a-spi-lorawan-concentrator-868mhz.html) configured as described [by TTN-ZH](https://github.com/ttn-zh/ic880a-gateway/wiki). You **do not** need to follow the **Setting up the software** step, as the setup scripts in this repository does it for you.
-2. "linklabs-dev", a [LinkLabs Raspberry Pi "Hat"](http://link-labs.myshopify.com/products/lorawan-raspberry-pi-board)
-
-
-## PREREQUISITES
+## Prerequisites
 
 1. Build your hardware.
 2. Create a new gateway that uses `gateway connector` on the [TTN Console](https://console.thethingsnetwork.org/gateways). Also set the location and altitude of your gateway. We will come back to this console later to obtain the gateway ID and access key.
-3. Create and sign into an account at http://resin.io, which is the central "device dashboard".  By using this dashboard you will be able to create the "boot SD" for your Raspberry pi.  When you use that SD card, Resin will recognize that Raspberry Pi as belonging to you, will then deliver the gateway software to your RPi, and will subsequently keep your RPi up-to-date with future updates to the gateway software.
-4. Clone **this** github repo to your mac/pc.  That desktop repo will be subsequently used to instruct resin.io  what software to place on your gateway(s).
+3. Create and sign into an account at http://resin.io, which is the central "device dashboard".
 
-## PREPARING YOUR FIRST GATEWAY DEVICE FOR RESIN.IO
+## Create a resin.io application
 
 1. On resin.io, create an "Application" for managing your TTN gateway devices. I'd suggest that you give it the name "ttngw", select the appropriate device type (i.e. Raspberry Pi 2 or Raspberry Pi 3),  and click "Create New Application".  You only need to do this once, after which you'll be able to manage one or many gateways of that type.
-2. You'll then be brought to the Device Management dashboard for that Application.  Follow the instructions to create a boot SD for your Raspberry Pi. (Pro Tip:  Use a fast microSD card and a USB 3 adapter if you can, because it can take a while to copy all that data. Either that, or be prepared to be very patient.)  Note that during the long process of waiting for the "sudo dd" command, if you're using a Mac you can press "Ctrl T" which will give you an interim progress report. 
+2. You'll then be brought to the Device Management dashboard for that Application.  Follow the instructions to "DOWNLOAD RESINOS" and create a boot SD-card for your Raspberry Pi. (Pro Tip:  Use a fast microSD card and a USB 3 adapter if you can, because it can take a while to copy all that data. Either that, or be prepared to be very patient.)
 3. When the (long) process of writing the image to the SD card completes, insert it into your Raspberry Pi, connect it to the network with Ethernet, and power it up.
 4. After several minutes, on the resin.io Devices dashboard you'll now see your device - first in a "Configuring" state, then "Idle".  Click it to open the Devices control panel.
-5. If you like, enter any new Device Name that you'd like, such as "gateway-1".
+5. If you like, enter any new Device Name that you'd like, such as "my-gateway-amsterdam".
 
-## PREPARING YOUR FIRST GATEWAY DEVICE FOR TTN
+## Configure the gateway device
 
-Click the "Environment Variables" section at the left side of the screen. This will allow you to configure environment parameters for this and only this device, and which will be appropriately inserted into this device's "local_conf.json" with lowercase tuple names derived from the appropriate uppercase environment names beginning with "GW_".  For example, for an IMST gateway with no GPS, the MINIMUM environment variables that you should configure at this screen should look something like this:
+Click the "Environment Variables" section at the left side of the screen. This will allow you to configure this and only this device. These variables will be used to pull information about this gateway from TTN, and will be used to create a "global_conf.json" and "local_conf.json" file for this gateway.
 
-DEVICE ENVIRONMENT VARIABLES  
+For a more complete list of possible environment variables, see [CONFIGURATION](CONFIGURATION.md).
 
-Name      	  	  | Value  
+### Device environment variables - no GPS
+
+For example, for an IMST iC880A with no GPS, the MINIMUM environment variables that you should configure at this screen should look something like this:
+
+Name      	  	   | Value  
 ------------------|--------------------------  
 GW_TYPE           | imst-ic880a-spi
 GW_CONTACT_EMAIL  | yourname@yourdomain.com
 GW_ID             | The gateway ID from the TTN console
 GW_KEY            | The gateway KEY from the TTN console
-GW_RESET_PIN      | 22
+GW_RESET_PIN      | 22 (optional)
 
-On the other hand, for the LinkLabs gateway, which has a built-in GPS, you need:
+GW_RESET_PIN can be left out if you are using Gonzalo Casas' backplane board, or any other setup using pin 22 as reset pin. This is because pin 22 is the default reset pin used by this resin.io setup.
 
-DEVICE ENVIRONMENT VARIABLES  
 
-Name      	  	  | Value  
+### Device environment variables - with GPS
+
+For example a LinkLabs gateway, which has a built-in GPS, you need:
+
+Name      	  	   | Value  
 ------------------|--------------------------  
-GW_TYPE           | linklabs-dev
 GW_CONTACT_EMAIL  | yourname@yourdomain.com
 GW_ID             | The gateway ID from the TTN console
 GW_KEY            | The gateway KEY from the TTN console
 GW_GPS            | true
 GW_RESET_PIN      | 29
 
-For a more complete list of possible environment variables, see [CONFIGURATION](CONFIGURATION.md).
 
-### Reset pin values
+## Reset pin values
 
 Depending on the way you connect the concentrator board to the Raspberry Pi, the reset pin of the concentrator might be on a different GPIO pin of the Raspberry Pi. Here follows a table of the most common backplane boards used, and the reset pin number you should use in the `GW_RESET_PIN` environment variable.
 
@@ -63,7 +71,7 @@ Backplane         | Reset pin
 Gonzalo Casas backplane<br \>https://github.com/gonzalocasas/ic880a-backplane<br \>https://www.tindie.com/stores/gnz/ | 22
 ch2i<br \>https://github.com/ch2i/iC880A-Raspberry-PI | 11
 Linklabs Rasberry Pi Hat | 29 (untested)
-Rising HF Board | 26 (untested)
+Rising HF Board<br />http://www.risinghf.com/product/risinghf-iot-dicovery/?lang=en | 26
 
 
 If you get the message
@@ -71,7 +79,7 @@ If you get the message
 after resin.io is finished downloading the application, or when restarting the gateway, it most likely means the `GW_RESET_PIN` you defined is incorrect.
 
 
-### SPECIAL Note for using the LinkLabs gateway on a Raspberry Pi 3
+## SPECIAL Note for using the LinkLabs gateway on a Raspberry Pi 3
 
 There is a backward incomatibility between the Raspberry Pi 1 and 2 hardware, and Raspberry Pi 3.  For Raspberry Pi 3, it is necessary to make a small additional configuration change.
 
@@ -79,15 +87,15 @@ Click <- to go back to the Device List, and note that on the left there is an op
 
 Add a New config variable as follows:
 
-APPLICATION CONFIG VARIABLES  
+### Application config variables
 
-Name      	            	  | Value  
+Name      	            	   | Value  
 ------------------------------|--------------------------  
 RESIN_HOST_CONFIG_core_freq   | 250
 
 ## TRANSFERRING TTN GATEWAY SOFTWARE TO RESIN SO THAT IT MAY BE DOWNLOADED ON YOUR DEVICES
 
-1. On your Mac or PC, in terminal, change your working directory to the directory that is the clone of this git repo:
+1. On your computer, clone this git repo. For example in a terminal on Mac or Linux type:
 
    ```bash
    git clone https://github.com/jpmeijers/ttn-resin-gateway-rpi.git
@@ -129,7 +137,8 @@ RESIN_HOST_CONFIG_core_freq   | 250
 
 # Credits
 
-[Gonzalo Casas](https://github.com/gonzalocasas) on the [iC880a-based gateway](https://github.com/ttn-zh/ic880a-gateway/tree/spi)
-[Ruud Vlaming](https://github.com/devlaam) on the [Lorank8 installer](https://github.com/Ideetron/Lorank)
-[Jac Kersing](https://github.com/kersing) on the [Multi-protocol packet forwarder](https://github.com/kersing/packet_forwarder/tree/master/mp_pkt_fwd)
-[The Team](https://resin.io/team/) at resin.io
+* [Gonzalo Casas](https://github.com/gonzalocasas) on the [iC880a-based gateway](https://github.com/ttn-zh/ic880a-gateway/tree/spi)
+* [Ruud Vlaming](https://github.com/devlaam) on the [Lorank8 installer](https://github.com/Ideetron/Lorank)
+* [Jac Kersing](https://github.com/kersing) on the [Multi-protocol packet forwarder](https://github.com/kersing/packet_forwarder/tree/master/mp_pkt_fwd)
+* [Ray Ozzie](https://github.com/rayozzie/ttn-resin-gateway-rpi) on the original ResinIO setup
+* [The Team](https://resin.io/team/) at resin.io
