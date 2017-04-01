@@ -107,7 +107,10 @@ RESIN_HOST_CONFIG_core_freq   | 250
    ```bash
    git remote add resin youraccount@git.resin.io:youraccount/yourapplication.git
    ```
-3. Type the following commands into terminal to "push" the TTN files up to resin.io:
+
+3. Add your SSH public key to the list at https://dashboard.resin.io/preferences/sshkeys. You may need to search the internet how to create a SSH key on your operating system, where to find it afterwards, copy the content, and paste the content to the resin.io console.
+   
+4. Type the following commands into your terminal to "push" the TTN files up to resin.io:
 
    ```bash
    git add .
