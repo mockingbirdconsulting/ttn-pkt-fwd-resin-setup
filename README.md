@@ -100,6 +100,7 @@ RESIN_HOST_CONFIG_core_freq   | 250
 
    ```bash
    git clone https://github.com/jpmeijers/ttn-resin-gateway-rpi.git
+   cd ttn-resin-gateway-rpi/
    ```
 2. Now, type the command that you'll see displayed in the edit control in the upper-right corner of the Resin devices dashboard for your device. This command "connects" your local directory to the resin GIT service, which uses GIT to "receive" the gateway software from TTN, and it looks something like this:
 
