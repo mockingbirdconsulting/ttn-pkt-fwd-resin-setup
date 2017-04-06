@@ -117,6 +117,19 @@ RESIN_HOST_CONFIG_core_freq   | 250
    git commit -m "first upload of ttn files to resin"
    git push -f resin master
    ```
+
+  **Troubleshooting:** 
+  If you get the error below please check if your ssh public key has been added to you resin account. In addition verify whether your private key has the correct permissions (i.e. chmod 400 ~/.ssh/id_rsa). 
+
+  ```bash
+  $ git push -f resin master
+  Connection closed by xxx.xxx.xxx.xxx port 22
+  fatal: Could not read from remote repository.
+
+  Please make sure you have the correct access rights
+  and the repository exists.
+  $
+  ```
 5. What you'll now see happening in terminal is that this "git push" does an incredible amount of work:
   1. It will upload a Dockerfile, a "build script", and a "run script" to resin
   2. It will start to do a "docker build" using that Dockerfile, running it within a QEMU ARM virtual machine on the resin service.
