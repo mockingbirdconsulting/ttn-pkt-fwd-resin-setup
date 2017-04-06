@@ -13,6 +13,10 @@ import uuid
 import json
 import subprocess
 try:
+  import urlparse
+except:
+  import urllib.parse as urlparse
+try:
   import RPi.GPIO as GPIO
 except RuntimeError:
   print("Error importing RPi.GPIO!  This is probably because you need superuser privileges.  You can achieve this by using 'sudo' to run your script")
@@ -104,8 +108,9 @@ if(os.getenv('SERVER_TTN', True)):
   frequency_plan_url = ttn_config.get('frequency_plan_url', "https://account.thethingsnetwork.org/api/v2/frequency-plans/EU_863_870")
 
   if "router" in ttn_config:
-    router = ttn_config['router'].get('mqtt_address', "router.dev.thethings.network:1883")
-    router = router[:router.index(':')] #strip port from url, as this is added by mp_pkt_fwd
+    router = ttn_config['router'].get('mqtt_address', "mqtt://router.dev.thethings.network:1883")
+    router = urlparse.urlparse(router)
+    router = router.hostname # mp_pkt_fwd only wants the hostname, not the protocol and port
   else:
     router = "router.dev.thethings.network"
 
