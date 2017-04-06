@@ -3,6 +3,11 @@ This resin.io setup is based on the [Multi-protocol Packet Forwarder by Jac Kers
 
 If you want a stable gateway setup, stick to the [old poly-packet-forwarder resin.io setup](https://github.com/rayozzie/ttn-resin-gateway-rpi) for now. You will be able to update from the old one to this repo quite seamlessly in the future.
 
+## Difference between Poly-packet-forwarder and Multi-protocol-packet-forwarder
+mp-pkt-fwd uses the new protocolbuffers-over-mqtt-over-tcp protocol for gateways, as defined by TTN and used by the TTN kickstarter gateway. Using this protcol the gateway is authenticated, which means it is registered under a specific user and can thus be trusted. Because it uses TCP, the chance of packet loss is much lower than with the previous protocol that used UDP. Protocolbuffers packs the data in a compact binary mode into packets, using much less space than the plaintext json that was previously used. It should therefore consume less bandwidth.
+
+When you use this repository, the settings you set on the TTN console are taken as the primary settings. The settings from the console are read and applied at gateway startup. If you for example change the location of the gateway on the console, that setting will only be applied when the gateway restarts.
+
 # Resin.io TTN Gateway Connector for Raspberry Pi
 
 Resin Dockerfile & scripts for [The Things Network](http://thethingsnetwork.org/) gateways based on the Raspberry Pi. This updated version uses the gateway connector protocol, not the old packet forwarder. See the [TTN documentation on Gateway Registration](https://www.thethingsnetwork.org/docs/gateways/registration.html).
@@ -80,7 +85,7 @@ If you get the message
 after resin.io is finished downloading the application, or when restarting the gateway, it most likely means the `GW_RESET_PIN` you defined is incorrect.
 
 
-## SPECIAL Note for using the LinkLabs gateway on a Raspberry Pi 3
+## Special note for using the LinkLabs gateway on a Raspberry Pi 3
 
 There is a backward incomatibility between the Raspberry Pi 1 and 2 hardware, and Raspberry Pi 3.  For Raspberry Pi 3, it is necessary to make a small additional configuration change.
 
@@ -117,6 +122,7 @@ RESIN_HOST_CONFIG_core_freq   | 250
    git commit -m "first upload of ttn files to resin"
    git push -f resin master
    ```
+   
 5. What you'll now see happening in terminal is that this "git push" does an incredible amount of work:
   1. It will upload a Dockerfile, a "build script", and a "run script" to resin
   2. It will start to do a "docker build" using that Dockerfile, running it within a QEMU ARM virtual machine on the resin service.
@@ -125,19 +131,34 @@ RESIN_HOST_CONFIG_core_freq   | 250
 
 6. Now, switch back to your device dashboard, you'll see that your Raspberry Pi is now "updating" by pulling the Docker container from the resin.io service.  Then, after "updating", you'll see the gateway's log file in the window at the lower right corner.  You'll see it initializing, and will also see log output each time a packet is forwarded to TTN.  You're done!
 
-## PRO TIPS
+
+
+## Troubleshooting ##
+If you get the error below please check if your ssh public key has been added to you resin account. In addition verify whether your private key has the correct permissions (i.e. chmod 400 ~/.ssh/id_rsa). 
+
+  ```bash
+  $ git push -f resin master
+  Connection closed by xxx.xxx.xxx.xxx port 22
+  fatal: Could not read from remote repository.
+
+  Please make sure you have the correct access rights
+  and the repository exists.
+  $
+  ```
+  
+# Pro Tips
 
 - At some point if you would like to add a second gateway, third gateway, or a hundred gateways, all you need to do is to add a new device to your existing Application. You needn't upload any new software to Resin, because Resin already knows what software belongs on the gateway. So long as the environment variables are configured correctly for that new device, it'll be up and running immediately after you burn an SD card and boot it.
 
 - Resin will automatically restart the gateway software any time you change the environment variables.  You'll see this in the log.  Also, note that Resin restarts the gateway properly after power failures.  If the packet forwarder fails because of an error, it will also automatically attempt to restart.
 
 - If you'd like to update the software across all the gateways in your device fleet, simply do the following:
-
-  Edit the Dockerfile to bump the TTN_GATEWAY_VERSION number
+  ```
   git add .
   git commit -m "Updated gateway version"
   git push -f resin master"
-  
+  ```
+
 - For devices without a GPS, the location that is configured on the TTN console is used. This location is only read at startup of the gateway. Therefore, after you set or changed the location, restart the application from the resin.io console.
 
 # Credits
