@@ -1,0 +1,12 @@
+[Unit]
+Description=TTN Gateway
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/ttn-gateway
+ExecStart=/opt/ttn-gateway/run.py
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target
