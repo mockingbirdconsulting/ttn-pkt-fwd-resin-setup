@@ -14,7 +14,6 @@ COPY ttn-gateway.service /etc/systemd/system/ttn-gateway.service
 
 # Build the gateway (or comment this out if debugging on-device)
 RUN ./dev/build.sh && rm -rf ./dev
-RUN systemctl daemon-reload
 
 # Start it up
 CMD ["systemctl", "start", "ttn-gateway"]
