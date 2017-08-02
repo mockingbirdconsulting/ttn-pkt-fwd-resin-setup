@@ -24,6 +24,8 @@ RUN wget https://ttnreleases.blob.core.windows.net/packet-forwarder/master/imst-
 RUN tar -zxvf imst-rpi-pktfwd.tar.gz
 RUN cp packet-forwarder /usr/local/bin/imst-rpi-pktfwd
 RUN touch /etc/ttn-gateway.yml
+RUN chmod +x install-systemd.sh
 RUN ./install-systemd.sh /usr/local/bin/imst-rpi-pktfwd /etc/ttn-gateway.yml
+RUN systemctl enable ttn-pkt-fwd
 
 CMD ["systemctl", "start", "ttn-pkt-fwd"]
