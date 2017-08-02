@@ -1,4 +1,5 @@
 #!/bin/bash
+source /etc/docker.env
 cat > /etc/ttn-pkt-fwd.yml  <<-EOF
 id: ${GW_ID}
 key: ${GW_KEY}
