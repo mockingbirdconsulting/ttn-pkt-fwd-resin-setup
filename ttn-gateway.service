@@ -1,12 +1,16 @@
 [Unit]
-Description=TTN Gateway
-After=network.target
-
-[Service]
-Type=simple
-WorkingDirectory=/opt/ttn-gateway
-ExecStart=/opt/ttn-gateway/run.py
-Restart=on-abort
+Description=TTN Packet Forwarder Service
 
 [Install]
 WantedBy=multi-user.target
+
+[Service]
+TimeoutStartSec=infinity
+Type=simple
+TimeoutSec=infinity
+RestartSec=10
+WorkingDirectory=/usr/local/bin
+ExecStartPre=/usr/local/bin/pkt-fwd-config.sh
+ExecStart=/usr/local/bin/imst-rpi-pktfwd start --config=/etc/ttn-gateway.yml
+Restart=always
+BusName=org.thethingsnetwork.ttn-pkt-fwd
