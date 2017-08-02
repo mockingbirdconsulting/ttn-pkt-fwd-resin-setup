@@ -7,25 +7,13 @@ ENV INITSYSTEM on
 ENV RESIN_ARCH %%RESIN_ARCH%%
 ENV RESIN_MACHINE_NAME %%RESIN_MACHINE_NAME%%
 
-# Copy the build and run environment
-#COPY . /opt/ttn-gateway/
-#WORKDIR /opt/ttn-gateway/
-#COPY ttn-gateway.service /etc/systemd/system/ttn-gateway.service
 
-# Build the gateway (or comment this out if debugging on-device)
-#RUN ./dev/build.sh && rm -rf ./dev
-
-# Start it up
-#
-
-#### THE NEW WAY OF DOING THINGS ####
 WORKDIR /opt/ttn-gateway
 RUN wget https://ttnreleases.blob.core.windows.net/packet-forwarder/master/imst-rpi-pktfwd.tar.gz
 RUN tar -zxvf imst-rpi-pktfwd.tar.gz
 RUN cp packet-forwarder /usr/local/bin/imst-rpi-pktfwd
-RUN touch /etc/ttn-gateway.yml
-RUN chmod +x install-systemd.sh
-RUN ./install-systemd.sh /usr/local/bin/imst-rpi-pktfwd /etc/ttn-gateway.yml
-RUN systemctl enable ttn-pkt-fwd
+COPY ttn-gateway.service /etc/systemd/system/ttn-gateway.service
+COPY pkt-fwd-config.sh /usr/local/bin/pkt-fwd-config.sh
+RUN systemctl enable ttn-gateway
 
-CMD ["systemctl", "start", "ttn-pkt-fwd"]
+CMD ["systemctl", "start", "ttn-gateway"]

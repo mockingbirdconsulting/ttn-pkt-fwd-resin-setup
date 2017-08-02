@@ -11,6 +11,6 @@ TimeoutSec=infinity
 RestartSec=10
 WorkingDirectory=/usr/local/bin
 ExecStartPre=/usr/local/bin/pkt-fwd-config.sh
-ExecStart=/usr/local/bin/imst-rpi-pktfwd start --config=/etc/ttn-gateway.yml
+ExecStart=/usr/local/bin/imst-rpi-pktfwd start --config=/etc/ttn-pkt-fwd.yml
 Restart=always
 BusName=org.thethingsnetwork.ttn-pkt-fwd
